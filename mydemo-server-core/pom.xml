@@ -6,7 +6,6 @@
         <groupId>io.hiker</groupId>
         <artifactId>mydemo-server</artifactId>
         <version>0.0.1-SNAPSHOT</version>
-        <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <artifactId>mydemo-server-core</artifactId>
     <version>0.0.1-SNAPSHOT</version>
@@ -28,21 +27,12 @@
         </dependency>
         <dependency>
             <groupId>io.hiker</groupId>
-            <artifactId>mydemo-model</artifactId>
+            <artifactId>mydemo-common-model</artifactId>
         </dependency>
         <dependency>
             <groupId>io.hiker</groupId>
-            <artifactId>mydemo-utils</artifactId>
+            <artifactId>mydemo-common-utils</artifactId>
         </dependency>
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
 
 </project>
