@@ -1,9 +1,11 @@
 package io.hiker.server.api;
 
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = "io.hiker")
+@MapperScan(basePackages = "io.hiker.server.core.mapper")
 public class MydemoServerApiApplication {
 
     public static void main(String[] args) {

@@ -47,6 +47,11 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-openfeign</artifactId>
         </dependency>
+        <!-- ========================module======================-->
+        <dependency>
+            <groupId>io.hiker</groupId>
+            <artifactId>mydemo-server-core</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
