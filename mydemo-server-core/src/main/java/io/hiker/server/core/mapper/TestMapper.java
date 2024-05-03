@@ -11,7 +11,7 @@ import org.apache.ibatis.annotations.Mapper;
 * @Entity io.hiker.server.core.model.Test
 */
 
-@Mapper
+//@Mapper
 public interface TestMapper extends BaseMapper<Test> {
 
 }
