@@ -3,7 +3,7 @@ package io.hiker.server.api.controller;
 import io.hiker.common.model.response.R;
 import io.hiker.common.model.response.REnum;
 import io.hiker.server.api.model.vo.DbUserVo;
-import io.hiker.server.api.service.DbUserDetailsManager;
+import io.hiker.server.api.config.DbUserDetailsManager;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,7 +24,7 @@ public class UserController {
     public R<Void> create(@RequestBody DbUserVo userVo) {
         try {
             if (StringUtils.isBlank(userVo.getUsername()) || StringUtils.isBlank(userVo.getPassword())) {
-                return R.clientFail("用户名或密码不能为空");
+                return new R<Void>(REnum.CLIENT_FAIL).setMsg("用户名或密码不能为空");
             }
             dbUserDetailsManager.createUser(userVo.toBo());
             return R.success();

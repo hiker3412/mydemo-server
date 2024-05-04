@@ -1,4 +1,4 @@
-package io.hiker.server.api.service;
+package io.hiker.server.api.config;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import io.hiker.server.api.mapper.DbUserMapper;
@@ -11,12 +11,13 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.GroupManager;
 import org.springframework.security.provisioning.UserDetailsManager;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Slf4j
-@Service
+@Component
 public class DbUserDetailsManager implements UserDetailsManager, GroupManager {
 
     private final DbUserMapper dbUserMapper;
