@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="io.hiker.server.core.mapper.TestMapper">
 
-    <resultMap id="BaseResultMap" type="io.hiker.server.core.model.Test">
+    <resultMap id="BaseResultMap" type="io.hiker.server.core.model.entity.Test">
             <id property="id" column="id" jdbcType="INTEGER"/>
             <result property="name" column="name" jdbcType="VARCHAR"/>
     </resultMap>

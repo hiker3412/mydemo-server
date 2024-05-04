@@ -13,7 +13,7 @@ class MydemoServerApiApplicationTests {
     @Test
     void contextLoads() {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        System.out.println( encoder.encode("test"));
+        System.out.println("========================================"+ encoder.encode("test"));
     }
 
 }

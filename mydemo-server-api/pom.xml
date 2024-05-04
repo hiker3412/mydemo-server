@@ -52,6 +52,12 @@
             <groupId>io.hiker</groupId>
             <artifactId>mydemo-server-core</artifactId>
         </dependency>
+        <!-- ========================utils======================-->
+        <dependency>
+            <groupId>com.github.xiaoymin</groupId>
+            <artifactId>knife4j-openapi3-jakarta-spring-boot-starter</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>

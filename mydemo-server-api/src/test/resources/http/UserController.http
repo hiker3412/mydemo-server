@@ -1,0 +1,7 @@
+GET http://localhost:8088/mydemo-server/user/create
+Content-Type: application/json
+
+{
+  "username": "test2",
+  "password": "test2"
+}

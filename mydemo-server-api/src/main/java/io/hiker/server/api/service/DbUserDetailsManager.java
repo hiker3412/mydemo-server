@@ -1,25 +1,26 @@
-package io.hiker.server.api.security;
+package io.hiker.server.api.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import io.hiker.server.api.mapper.DbUserMapper;
-import io.hiker.server.api.model.DbUser;
+import io.hiker.server.api.model.bo.DbUserBo;
+import io.hiker.server.api.model.entity.DbUserEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.GroupManager;
 import org.springframework.security.provisioning.UserDetailsManager;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Slf4j
+@Service
 public class DbUserDetailsManager implements UserDetailsManager, GroupManager {
 
-    private DbUserMapper dbUserMapper;
-    private PasswordEncoder passwordEncoder;
+    private final DbUserMapper dbUserMapper;
+    private final PasswordEncoder passwordEncoder;
 
     public DbUserDetailsManager(DbUserMapper dbUserMapper, PasswordEncoder passwordEncoder) {
         this.dbUserMapper = dbUserMapper;
@@ -78,7 +79,9 @@ public class DbUserDetailsManager implements UserDetailsManager, GroupManager {
 
     @Override
     public void createUser(UserDetails user) {
-
+        DbUserBo dbUserBo = (DbUserBo) user;
+        dbUserBo.setPassword(passwordEncoder.encode(dbUserBo.getPassword()));
+        dbUserMapper.insert(dbUserBo.toEntity());
     }
 
     @Override
@@ -103,21 +106,15 @@ public class DbUserDetailsManager implements UserDetailsManager, GroupManager {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        LambdaQueryWrapper<DbUser> queryWrapper =
-                new LambdaQueryWrapper<DbUser>().eq(DbUser::getUsername, username);
-        DbUser dbUser = dbUserMapper.selectOne(queryWrapper);
+        LambdaQueryWrapper<DbUserEntity> queryWrapper =
+                new LambdaQueryWrapper<DbUserEntity>().eq(DbUserEntity::getUsername, username);
+        DbUserEntity dbUserEntity = dbUserMapper.selectOne(queryWrapper);
 
-        if (dbUser == null) {
+        if (dbUserEntity == null) {
             log.debug("Query returned no results for user '" + username + "'");
             throw new UsernameNotFoundException("Username {username} not found");
         }
 
-        return new User(dbUser.getUsername(),
-                dbUser.getPassword(),
-                dbUser.isEnabled(),
-                true,
-                true,
-                true,
-                AuthorityUtils.NO_AUTHORITIES);
+        return dbUserEntity.toBo();
     }
 }

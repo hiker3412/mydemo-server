@@ -1,7 +1,7 @@
 package io.hiker.server.core.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import io.hiker.server.core.model.Test;
+import io.hiker.server.core.model.entity.Test;
 import io.hiker.server.core.service.TestService;
 import io.hiker.server.core.mapper.TestMapper;
 import org.springframework.stereotype.Service;

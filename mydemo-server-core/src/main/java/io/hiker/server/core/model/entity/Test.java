@@ -1,4 +1,4 @@
-package io.hiker.server.core.model;
+package io.hiker.server.core.model.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -14,14 +14,13 @@ import lombok.Data;
 @TableName(value ="test")
 @Data
 public class Test implements Serializable {
-    /**
-     * 
-     */
+
+    //测试用户ID
     @TableId(type = IdType.AUTO)
     private Integer id;
 
     /**
-     * 
+     * 测试用户名
      */
     private String name;
 
