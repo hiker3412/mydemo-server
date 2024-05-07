@@ -1,4 +1,4 @@
-package io.hiker.server.api.config;
+package io.hiker.server.api.config.security;
 
 import com.google.gson.Gson;
 import io.hiker.common.model.response.R;
@@ -16,11 +16,11 @@ import org.springframework.util.MimeTypeUtils;
 
 import java.io.IOException;
 
-@Configuration
+@Component
 public class JsonAuthenticationFailHandler implements AuthenticationFailureHandler {
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException {
         response.setContentType(MimeTypeUtils.APPLICATION_JSON_VALUE+ ";charset=UTF-8");
-        response.getWriter().write(new Gson().toJson(R.from(REnum.NOT_LOGIN)));
+        response.getWriter().write(new Gson().toJson(new R<>(REnum.NOT_LOGIN).setMsg("登录失败")));
     }
 }

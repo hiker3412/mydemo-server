@@ -10,9 +10,9 @@ import java.time.LocalDateTime;
 
 @Data
 @Accessors(chain = true)
-@TableName("user")
-public class DbUserEntity extends EntityCommonField {
-    private String username;
-    private String password;
-    private boolean enabled = true;
+@TableName("user_authority")
+public class DbUserAuthorityEntity extends EntityCommonField {
+    private String userid;
+    private String authority;
+
 }

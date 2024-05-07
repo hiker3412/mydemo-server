@@ -1,36 +1,40 @@
 package io.hiker.server.api.controller;
 
 import io.hiker.common.model.response.R;
-import io.hiker.common.model.response.REnum;
+import io.hiker.server.api.model.entity.DbUserEntity;
 import io.hiker.server.api.model.vo.DbUserVo;
-import io.hiker.server.api.config.DbUserDetailsManager;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import io.hiker.server.api.service.DbUserService;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/user")
 public class UserController {
 
-    private final DbUserDetailsManager dbUserDetailsManager;
+    private final DbUserService dbUserService;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserController(DbUserDetailsManager dbUserDetailsManager) {
-        this.dbUserDetailsManager = dbUserDetailsManager;
+    public UserController(DbUserService dbUserService,
+                          PasswordEncoder passwordEncoder
+    ) {
+        this.dbUserService = dbUserService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @PostMapping("/create")
-    public R<Void> create(@RequestBody DbUserVo userVo) {
-        try {
-            if (StringUtils.isBlank(userVo.getUsername()) || StringUtils.isBlank(userVo.getPassword())) {
-                return new R<Void>(REnum.CLIENT_FAIL).setMsg("用户名或密码不能为空");
-            }
-            dbUserDetailsManager.createUser(userVo.toBo());
-            return R.success();
-        } catch (Exception e) {
-            return new R<Void>(REnum.FAIL).setMsg("创建用户失败");
-        }
+    public R<Void> create(@RequestBody DbUserVo vo) {
+        DbUserEntity entity = new DbUserEntity()
+                .setUsername(vo.getUsername())
+                .setPassword(vo.getPassword());
+        dbUserService.save(entity);
+        return R.success();
+    }
+
+    @GetMapping("/list")
+    public R<List<DbUserEntity>> list() {
+        return R.success(dbUserService.list());
     }
 
 }

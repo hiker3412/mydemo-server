@@ -1,4 +1,4 @@
-package io.hiker.server.api.config;
+package io.hiker.server.api.config.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,18 +22,21 @@ public class WebSecurityConfiguration {
             HttpSecurity security,
             AuthenticationFailureHandler authenticationFailureHandler,
             LogoutSuccessHandler logoutSuccessHandler,
-            AuthenticationEntryPoint authenticationEntryPoint,
+//            AuthenticationEntryPoint authenticationEntryPoint,
             AccessDeniedHandler accessDeniedHandler,
             SessionInformationExpiredStrategy sessionInformationExpiredStrategy
     ) throws Exception {
         security
                 .authorizeHttpRequests(authorizationConfigure ->
                         authorizationConfigure
+                                .requestMatchers("/login").permitAll()
+                                .requestMatchers("/user/list").hasAuthority("LIST")
+                                .requestMatchers("/user/create").hasAuthority("CREATE")
                                 .anyRequest().authenticated()
                 )
                 .exceptionHandling(exceptionConfigurer ->
                         exceptionConfigurer
-                                .authenticationEntryPoint(authenticationEntryPoint)
+//                                .authenticationEntryPoint(authenticationEntryPoint)
                                 .accessDeniedHandler(accessDeniedHandler)
                 )
                 .formLogin(authenticationConfigure ->
