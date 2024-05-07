@@ -22,5 +22,3 @@ create table user_authority
     constraint fk_authority_user foreign key (userid) references user (id),
     constraint idx unique (userid,authority)
 );
-
-create table user_role
