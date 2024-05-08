@@ -12,8 +12,8 @@ class MydemoServerApiApplicationTests {
 
     @Test
     void contextLoads() {
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        System.out.println("========================================"+ encoder.encode("test"));
+        String s = Base64.getEncoder().encodeToString("nacos@24nacos@24nacos@24nacos@24nacos@24".getBytes(StandardCharsets.UTF_8));
+        System.out.println("woshi" + s);
     }
 
 }
