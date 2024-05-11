@@ -5,7 +5,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.DefaultSecurityFilterChain;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
@@ -28,16 +27,17 @@ public class WebSecurityConfiguration {
     ) throws Exception {
         security
                 .authorizeHttpRequests(authorizationConfigure ->
-                        authorizationConfigure
-                                .requestMatchers("/login").permitAll()
-                                .requestMatchers("/user/list").hasAuthority("LIST")
-                                .requestMatchers("/user/create").hasAuthority("CREATE")
-                                .anyRequest().authenticated()
+                                authorizationConfigure
+//                                .requestMatchers("/login").permitAll()
+//                                .requestMatchers("/user/list").hasAuthority("LIST")
+//                                .requestMatchers("/user/create").hasAuthority("CREATE")
+//                                .anyRequest().authenticated()
+                                        .anyRequest().permitAll()
                 )
                 .exceptionHandling(exceptionConfigurer ->
-                        exceptionConfigurer
+                                exceptionConfigurer
 //                                .authenticationEntryPoint(authenticationEntryPoint)
-                                .accessDeniedHandler(accessDeniedHandler)
+                                        .accessDeniedHandler(accessDeniedHandler)
                 )
                 .formLogin(authenticationConfigure ->
                         authenticationConfigure
