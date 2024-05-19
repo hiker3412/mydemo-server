@@ -1,4 +1,4 @@
-package io.hiker.server.api;
+package io.hiker.server.api.projectreactor;
 
 
 import com.fasterxml.jackson.databind.ser.Serializers;
