@@ -23,44 +23,40 @@ import java.util.List;
 
 public class FluxTest {
 
+    @Test
+    void just() {
+        Flux.just("foo","bar").subscribe(System.out::println);
+    }
 
+    @Test
+    void counterFlux() throws InterruptedException {
+        Flux.interval(Duration.ofMillis(100))
+                .take(10)
+                .subscribe(System.out::println);
+        //创建的是异步流，主线程结束则订阅会中断，需要主线程等待订阅完成；
+        Thread.sleep(1100);
+    }
+
+    @Test
+    void errorFlux() {
+        Flux.error(new IllegalStateException("error")).subscribe(System.out::println);
+    }
+
+    @Test
     void emptyFlux() {
         Flux.empty().subscribe(System.out::println);
     }
 
     @Test
-    void just() {
-        //创建的是一个立即完成的流，静态数据流，在主线程中执行
-        Flux.just("foo", "bar").subscribe(System.out::println);
+    void neverFlux() {
+        Flux.never().subscribe();
     }
 
     @Test
-    void fromIterable() {
-        //创建的是一个立即完成的流，静态数据流，在主线程中执行
-        List<String> list = new ArrayList();
-        list.add("foo");
-        list.add("bar");
-        Flux.fromIterable(list).subscribe(System.out::println);
-    }
-
-
-    @Test
-    void error() {
-        Flux.error(new IllegalStateException("error")).subscribe(System.out::println);
-    }
-
-    @Test
-    void counter() throws InterruptedException {
-        Flux.interval(Duration.ofMillis(100))
-                .take(10)
+    void concatWithFlux() {
+        Flux.just("foo", "bar")
+                .concatWith(Flux.just("foo2", "bar2"))
                 .subscribe(System.out::println);
-        //创建的是异步流，主线程结束则订阅会中断；
-        Thread.sleep(1100);
-    }
-
-    @Test
-    void never() {
-        Flux.never().subscribe(System.out::println);
     }
 
 
