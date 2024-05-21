@@ -63,4 +63,16 @@ public class StepVerifierTest {
         //立即完成
         System.out.println(stopWatch.getTotalTimeMillis());
     }
+
+    @Test
+    void delay () {
+        //没有任何输出
+        Mono.delay(Duration.ofSeconds(3)).subscribe(System.out::println);
+        //触发一次 onNext事件,没有任何输出
+        StepVerifier.withVirtualTime(() -> Mono.delay(Duration.ofSeconds(3)))
+                .thenAwait(Duration.ofSeconds(3))
+                .expectNextCount(1) //触发一次 onNext事件
+                .expectComplete()
+                .verify();
+    }
 }
