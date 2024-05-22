@@ -75,4 +75,35 @@ public class StepVerifierTest {
                 .expectComplete()
                 .verify();
     }
+
+    @Test
+    void thenCancelTest() {
+        Flux<User> flux = Flux.just(User.SKYLER, User.JESSE);
+        StepVerifier stepVerifier = thenCancel(flux);
+        stepVerifier.verify();
+    }
+    StepVerifier thenCancel(Flux<User> flux) {
+        return StepVerifier.create(flux)
+                .thenRequest(1)
+                .expectNext(User.SKYLER)
+                .thenRequest(1)
+                .expectNext(User.JESSE)
+                .thenCancel();
+    }
+
+    @Test
+    void expectTimeoutTest() {
+        Flux<Integer> flux = Flux.range(1, 2).concatWith(Mono.never());
+        StepVerifier stepVerifier = expectTimeout(flux);
+        stepVerifier.verify();
+    }
+    StepVerifier expectTimeout(Flux<Integer> flux) {
+        return StepVerifier.create(flux)
+                .thenRequest(1)
+                .expectNext(1)
+                .thenRequest(1)
+                .expectNext(2)
+                .expectTimeout(Duration.ofSeconds(1));
+    }
+
 }
