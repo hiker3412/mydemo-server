@@ -65,7 +65,7 @@ public class StepVerifierTest {
     }
 
     @Test
-    void delay () {
+    void delay() {
         //没有任何输出
         Mono.delay(Duration.ofSeconds(3)).subscribe(System.out::println);
         //触发一次 onNext事件,没有任何输出
@@ -77,33 +77,36 @@ public class StepVerifierTest {
     }
 
     @Test
-    void thenCancelTest() {
+    void requestAndCancel() {
         Flux<User> flux = Flux.just(User.SKYLER, User.JESSE);
         StepVerifier stepVerifier = thenCancel(flux);
         stepVerifier.verify();
     }
+
     StepVerifier thenCancel(Flux<User> flux) {
         return StepVerifier.create(flux)
-                .thenRequest(1)
+                .thenRequest(1) //thenRequest 和 thenCancel 配合使用，
                 .expectNext(User.SKYLER)
                 .thenRequest(1)
                 .expectNext(User.JESSE)
-                .thenCancel();
+                .thenCancel(); //必须使用 thenCancel 取消 request
     }
 
     @Test
-    void expectTimeoutTest() {
-        Flux<Integer> flux = Flux.range(1, 2).concatWith(Mono.never());
+    void requestAndExpectTimeout() {
+        Flux<Integer> flux = Flux.range(1, 2)
+                .concatWith(Mono.never()); //expectTimeout必须不能发送任何信号
         StepVerifier stepVerifier = expectTimeout(flux);
         stepVerifier.verify();
     }
+
     StepVerifier expectTimeout(Flux<Integer> flux) {
         return StepVerifier.create(flux)
-                .thenRequest(1)
+                .thenRequest(1) //thenRequest 和 expectTimeout 配合使用，
                 .expectNext(1)
                 .thenRequest(1)
                 .expectNext(2)
-                .expectTimeout(Duration.ofSeconds(1));
+                .expectTimeout(Duration.ofSeconds(1));  //必须使用 expectTimeout取消 request;
     }
 
 }
