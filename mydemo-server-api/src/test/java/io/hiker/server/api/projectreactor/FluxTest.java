@@ -1,31 +1,18 @@
 package io.hiker.server.api.projectreactor;
 
 
-import com.fasterxml.jackson.databind.ser.Serializers;
-import org.bouncycastle.asn1.pkcs.CertificationRequest;
-import org.bouncycastle.asn1.pkcs.CertificationRequestInfo;
-import org.bouncycastle.asn1.x509.X509Name;
-import org.bouncycastle.cert.jcajce.JcaX509CertificateHolder;
 import org.junit.jupiter.api.Test;
-import org.reactivestreams.Subscriber;
-import reactor.core.publisher.BaseSubscriber;
+import org.springframework.context.annotation.Configuration;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.nio.charset.StandardCharsets;
-import java.security.PublicKey;
-import java.security.Security;
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Base64;
-import java.util.List;
 
 public class FluxTest {
 
     @Test
     void just() {
-        Flux.just("foo","bar").subscribe(System.out::println);
+        Flux.just("foo", "bar").subscribe(System.out::println);
     }
 
     @Test
@@ -59,5 +46,23 @@ public class FluxTest {
                 .subscribe(System.out::println);
     }
 
+    @Test
+    void onErrorReturnTest() {
+        Mono.just("element1")
+                .doOnNext((s) -> {
+                    throw new IllegalStateException("");
+                })
+                .onErrorReturn("fallback to element1")
+                .subscribe(System.out::println);
+    }
 
+    @Test
+    void onErrorResumeTest() {
+        Mono.just("element1")
+                .doOnNext((s) -> {
+                    throw new IllegalStateException("");
+                })
+                .onErrorResume(s -> Mono.just("fallback to origin Mono:" + "fallback element2"))
+                .subscribe(System.out::println);
+    }
 }
