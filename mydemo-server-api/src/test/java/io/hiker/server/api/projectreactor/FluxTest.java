@@ -1,31 +1,17 @@
 package io.hiker.server.api.projectreactor;
 
 
-import com.fasterxml.jackson.databind.ser.Serializers;
-import org.bouncycastle.asn1.pkcs.CertificationRequest;
-import org.bouncycastle.asn1.pkcs.CertificationRequestInfo;
-import org.bouncycastle.asn1.x509.X509Name;
-import org.bouncycastle.cert.jcajce.JcaX509CertificateHolder;
 import org.junit.jupiter.api.Test;
-import org.reactivestreams.Subscriber;
-import reactor.core.publisher.BaseSubscriber;
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
 
-import java.nio.charset.StandardCharsets;
-import java.security.PublicKey;
-import java.security.Security;
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Base64;
-import java.util.List;
 
 public class FluxTest {
 
     @Test
     void just() {
-        Flux.just("foo","bar").subscribe(System.out::println);
+        Flux.just("foo", "bar").subscribe(System.out::println);
     }
 
     @Test
@@ -57,6 +43,34 @@ public class FluxTest {
         Flux.just("foo", "bar")
                 .concatWith(Flux.just("foo2", "bar2"))
                 .subscribe(System.out::println);
+    }
+
+    @Test
+    void testScheduler() {
+        Flux.range(1, 3)
+                .doOnNext(
+                        data -> System.out.println(
+                                "线程" + Thread.currentThread().getName() + "发送元素：" + data + "，给operator"
+                        )
+                )
+                // 指定订阅在(Schedulers.elastic())调度器上执行
+                .subscribeOn(Schedulers.boundedElastic())
+                .map(
+                        integer -> {
+                            System.out.println(
+                                    "线程" + Thread.currentThread().getName() + "执行operator，处理元素：" + integer
+                            );
+                            return integer * 2;
+                        }
+                )
+                // 改变下游操作的执行调度器到(Schedulers.single())
+                .publishOn(Schedulers.single())
+                .doOnNext(
+                        transformedData -> System.out.println(
+                                "线程" + Thread.currentThread().getName() + "发送元素：" + transformedData + "，给consumer"
+                        )
+                )
+                .blockLast();
     }
 
 
