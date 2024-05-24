@@ -2,6 +2,7 @@ package io.hiker.server.api.projectreactor;
 
 
 import org.junit.jupiter.api.Test;
+import org.springframework.context.annotation.Configuration;
 import reactor.core.publisher.Flux;
 import reactor.core.scheduler.Schedulers;
 
@@ -45,6 +46,25 @@ public class FluxTest {
                 .subscribe(System.out::println);
     }
 
+    @Test
+    void onErrorReturnTest() {
+        Mono.just("element1")
+                .doOnNext((s) -> {
+                    throw new IllegalStateException("");
+                })
+                .onErrorReturn("fallback to element1")
+                .subscribe(System.out::println);
+    }
+
+    @Test
+    void onErrorResumeTest() {
+        Mono.just("element1")
+                .doOnNext((s) -> {
+                    throw new IllegalStateException("");
+                })
+                .onErrorResume(s -> Mono.just("fallback to origin Mono:" + "fallback element2"))
+                .subscribe(System.out::println);
+    }
     @Test
     void testScheduler() {
         Flux.range(1, 3)
